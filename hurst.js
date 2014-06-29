@@ -1,3 +1,9 @@
+global.fs = require('fs');
+global.secret = JSON.parse(fs.readFileSync(__dirname+"/.secret.json", 'utf8'));
+console.log(global.secret);
+global.nm = require("nodemailer");
+global.s4 = function() {return Math.floor((1 + Math.random()) * 0x10000).toString(36);};
+
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
@@ -25,7 +31,8 @@ hurst.listen(5000);
 
 hurst.get('/', routes.index);
 hurst.get('/gallery', routes.gallery);
-hurst.get('/', routes.index);
+hurst.get('/estimate', routes.estimaterecieved);
+hurst.post('/make_estimate', routes.estimate);
 
 
 /// catch 404 and forward to error handler
