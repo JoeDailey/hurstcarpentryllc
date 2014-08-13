@@ -1,14 +1,18 @@
+var express = require('express');
+var router = express.Router();
+
 
 /* GET home page. */
-exports.index = function(req, res) {
+router.get("/", function(req, res) {
 	console.log(global.fs.readdirSync(__dirname + "/../public/img"))
-  res.render('index', { photos: global.fs.readdirSync(__dirname + "/../public/img"), nav: '' });
-};
-exports.gallery = function(req, res) {
-  res.render('index', { nav: 'Gallery' });
-};
+	res.render('index', { photos: global.fs.readdirSync(__dirname + "/../public/img"), nav: '', admin:(req.signedCookies.session == "nickhurst")});
+});
 
-exports.estimate = function(req, res) {
+router.get("/gallery", function(req, res) {
+  res.render('index', { nav: 'Gallery', admin:(req.signedCookies.session == "nickhurst")});
+});
+
+router.post("/make_estimate", function(req, res) {
 	console.log(req.body)
 	// var transport = nm.createTransport();
 	var transport = nm.createTransport("direct", {debug: true});
@@ -99,11 +103,12 @@ exports.estimate = function(req, res) {
 	        fs.writeFile(__dirname+"/../logs/"+s4()+s4(), req.body);
 	    });
 	});
-};
+});
 
-exports.estimaterecieved = function(req, res) {
+router.get("/estimate", function(req, res) {
 	res.render('success', { nav: 'Success' });
-};
+});
 
 var monthlengths = [31,28,31,30,31,30,31,31,30,31,30,31];
 
+module.exports = router;

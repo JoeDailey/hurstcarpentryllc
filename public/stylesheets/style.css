@@ -96,7 +96,7 @@ ul { display: none;}
 .basic-grey input{
 	width: 100%;
 }
-.basic-grey input[type="text"], .basic-grey input[type="email"], .basic-grey textarea,.basic-grey select{
+.basic-grey input[type="text"], .basic-grey input[type="email"], .basic-grey input[type="password"], .basic-grey textarea,.basic-grey select{
     border: 1px solid #DADADA;
     color: #888;
     height: 24px;

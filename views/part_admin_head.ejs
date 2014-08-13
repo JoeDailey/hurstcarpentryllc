@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% if(locals.nav){ %>
+    	<title>Hurst Carpentry | <%= nav %></title>
+    <% }else{ %>
+    	<title>Hurst Carpentry</title>
+    <% } %>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+    <link rel='stylesheet' href='/stylesheets/navbar.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  	<script type='text/javascript' src='/javascripts/jquery.js'></script>
+  </head>
+  <body>
+  <nav class="topNav navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand <%= (locals.nav=='')? 'active':'' %>" href="/"><!-- <img alt="" src="/img/jd_px.png" style="height:20px;margin-right:-1px;" /> --> Hurst Carpentry</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="<%= (locals.nav=='Gallery')? 'active':'' %>" ><a href="/gallery">Gallery</a></li>
+					<li class="<%= (locals.nav=='Projects')? 'active':'' %>" ><a href="/reviews">Reviews</a></li>
+					<li class="<%= (locals.nav=='Contact')? 'active':'' %>" ><a href="/contact">Contact</a></li>
+					<% if (locals.tag) { %>
+						<li class="active"><a href="#"><%= tag %></a></li>
+					<% } %>
+					<% if (locals.nav == 'Error') { %>
+						<li class="active"><a href="#" ><%= errorNumber %></a></li>
+					<% } %>
+				</ul>				
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<% if (locals.alert) { %>
+		<div class="content">
+			<div class="alert alert-success alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ><h3 style="margin-top:5px;">&times;</h3></button>
+				<h3><%- alert %></h3>
+			</div>
+		</div>
+	<% } %>

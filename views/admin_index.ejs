@@ -1,0 +1,50 @@
+<%= include part_admin_head %>
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<a href="/admin/filters">Filters</a>
+		</div>
+	</div>
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<a href="/admin/gallery">Gallery</a>
+		</div>
+	</div>
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<h1>General</h1>
+			<form method="POST" action="/admin/set/main">
+				<div class="form-group">
+					<label for="main">Home text</label>
+					<textarea id="main" class="form-control"><%= locals.settings.main %></textarea>
+					<input type="text" style="display:none;" id="mainshadow" name="main" value="<%= locals.settings.main %>">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="submit" value="Update">
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<h1>Contact</h1>
+			<form method="POST" action="/admin/set/contact">
+				<div class="form-group">
+					<label for="phone">By Phone</label>
+					<input class="form-control" type="phone" id="phone" name="phone" value="<%= locals.settings.contact.phone %>">
+				</div>
+				<div class="form-group">
+					<label for="email">By email</label>
+					<input class="form-control" type="email" id="email" name="email" value="<%= locals.settings.contact.email %>">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="submit" value="Update">
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+		$("textarea").bind("input propertychange", function(){
+			$("#"+$(this).attr("id")+"shadow").val($(this).val());
+		});
+	</script>
+<%= include part_foot %>
