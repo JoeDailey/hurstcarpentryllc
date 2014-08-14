@@ -1,0 +1,56 @@
+<% include part_admin_head %>
+
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<h1>Update gallery</h1>
+			<form method="POST" action="/admin/set/update_gallery/<%= gallery.showcase_id %>">
+				<div class="form-group">
+					<label for="title">Title</label>
+					<input id="title" class="form-control" type="text" name="title" value="<%= gallery.title %>">
+				</div>
+				<div class="form-group">
+					<label for="about">About</label>
+					<textarea id="about" class="form-control"><%= gallery.about %></textarea>
+					<input type="text" id="aboutshadow" style="display:none;" id="about" name="about" value="<%= gallery.about %>">
+				</div>
+				<div class="form-group">
+					<label for="location">Location</label>
+					<input id="location" class="form-control" type="text" name="location" value="<%= gallery.location %>">
+				</div>
+				<div class="form-group">
+					<label for="price">Price</label>
+					<input id="price" class="form-control" type="text" name="price" value="<%= gallery.price %>">
+				</div>
+				<div class="form-group">
+					<label for="filter">Category</label>
+					<select id="filter" class="form-control" type="text" name="filter_id" value="<%= gallery.filter_id %>">
+						<option value="none">None</option>
+						<% filters.forEach(function(filter){ %>
+							<option value="<%= filter.filter_id %>" <%= (filter.filter_id==gallery.filter_id)? 'selected="selected"':'' %> ><%= filter.type %></option>
+						<%	}); %>
+					</select>
+				</div>
+				<div class="form-group">
+					<input class="form-control btn btn-default" type="submit" value="Update">
+				</div>
+			</form>
+			<form method="POST" action="/admin/set/delete_gallery/<%= gallery.showcase_id %>">
+				<div class="form-group">
+					<input class="form-control btn btn-danger" type="submit" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<form method="POST" action="/admin/set/add_images/<%= gallery.showcase_id %>" accept-charset="UTF-8" enctype="multipart/form-data">
+				<div class="form-group">
+					<input type="file" name="img" multiple>
+				</div>
+				<div class="form-group">
+					<input class="form-control btn btn-default" type="submit" value="Upload">
+				</div>
+			</form>
+		</div>
+	</div>
+<% include part_foot %>

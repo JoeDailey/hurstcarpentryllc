@@ -1,39 +1,45 @@
 <% include part_admin_head %>
 
 	<% gallery.forEach(function(gallery_entity){ %>
-		<div class="gallery-admin">
-			<img src="" style="height:100%" src="<%= gallery.img_url %>">
-			<h1><%= gallery_entity.title %></h1>
-			<p><%= gallery_entity.about %></p>
-		</div>
+		<a href="/admin/gallery/<%= gallery_entity.showcase_id %>">
+			<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+				<div class="card">
+					<h1><%= gallery_entity.title %></h1>
+					<p><%= gallery_entity.about %></p>
+					<p><%= gallery_entity.price %></p>
+					<p><%= gallery_entity.location %></p>
+					<p><%= gallery_entity.filter_type %></p>
+				</div>
+			</div>
+		</a>
 	<%	}); %>
 	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
 		<div class="card">
 			<h1>Add gallery Entry</h1>
 			<form method="POST" action="/admin/set/new_gallery">
 				<div class="form-group">
-					<label for="gallery-title">Title</label>
-					<input id="gallery-title" class="form-control" type="text" name="gallery-title">
+					<label for="title">Title</label>
+					<input id="title" class="form-control" type="text" name="title">
 				</div>
 				<div class="form-group">
-					<label for="gallery-about">About</label>
-					<textarea id="gallery-about" class="form-control"></textarea>
-					<input type="text" style="display:none;" id="gallery-about" name="gallery-about">
+					<label for="about">About</label>
+					<textarea id="about" class="form-control"></textarea>
+					<input type="text" id="aboutshadow" style="display:none;" id="about" name="about">
 				</div>
 				<div class="form-group">
-					<label for="gallery-location">Location</label>
-					<input id="gallery-location" class="form-control" type="text" name="gallery-location">
+					<label for="location">Location</label>
+					<input id="location" class="form-control" type="text" name="location">
 				</div>
 				<div class="form-group">
-					<label for="gallery-price">Price</label>
-					<input id="gallery-price" class="form-control" type="text" name="gallery-price">
+					<label for="price">Price</label>
+					<input id="price" class="form-control" type="text" name="price">
 				</div>
 				<div class="form-group">
-					<label for="gallery-filter">Category</label>
-					<select id="gallery-filter" class="form-control" type="text" name="gallery-filter">
+					<label for="filter">Category</label>
+					<select id="filter" class="form-control" type="text" name="filter_id">
 						<option value="none">None</option>
 						<% filters.forEach(function(filter){ %>
-							<option value="<%= filter.filter_id %>"><%= filter_type %></option>
+							<option value="<%= filter.filter_id %>"><%= filter.type %></option>
 						<%	}); %>
 					</select>
 				</div>

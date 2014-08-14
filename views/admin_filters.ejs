@@ -1,31 +1,36 @@
 <% include part_admin_head %>
 
 	<% filters.forEach(function(filter){ %>
-		<div class="filter-admin">
-			<img src="" style="height:100%" src="<%= filter.img_url %>">
-			<h1><%= filter.title %></h1>
-			<p><%= filter.about %></p>
-		</div>
+		<a href="/admin/filters/<%= filter.filter_id %>">
+			<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+				<div class="card">
+					<h1><%= filter.type %></h1>
+					<p><%= filter.details %></p>
+					<p><%= filter.price %></p>
+					<p><%= filter.price_per %></p>
+				</div>
+			</div>
+		</a>
 	<%	}); %>
 	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
 		<div class="card">
-			<h1>Add filter</h1>
+			<h1>Add Filter</h1>
 			<form method="POST" action="/admin/set/new_filter">
 				<div class="form-group">
 					<label for="filter-type">Title</label>
-					<input id="filter-type" class="form-control" type="text" name="filter-type">
+					<input id="filter-type" class="form-control" type="text" name="type">
 				</div>
 				<div class="form-group">
-					<label for="filter-detail">Detail</label>
-					<textarea id="filter-detail" class="form-control"></textarea>
-					<input type="text" style="display:none;" id="filter-detail" name="filter-detail">
+					<label for="filter-details">Details</label>
+					<textarea id="filter-details" class="form-control"></textarea>
+					<input type="text" style="display:none;" id="filter-detailsshadow" name="details">
 				</div>
 				<div class="form-inline form-group" >
 					<div class="form-group">
 						<label for="filter-price">Price</label>
-						<input id="filter-price" class="form-control" type="text" name="filter-price">
+						<input id="filter-price" class="form-control" type="text" name="price">
 						<label for="filter-price_per">Per</label>
-						<input id="filter-price_per" class="form-control" type="text" name="filter-price_per">
+						<input id="filter-price_per" class="form-control" type="text" name="price_per">
 					</div>
 				</div>
 				<div class="form-group">

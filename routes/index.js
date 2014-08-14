@@ -5,7 +5,10 @@ var router = express.Router();
 /* GET home page. */
 router.get("/", function(req, res) {
 	console.log(global.fs.readdirSync(__dirname + "/../public/img"))
-	res.render('index', { photos: global.fs.readdirSync(__dirname + "/../public/img"), nav: '', admin:(req.signedCookies.session == "nickhurst")});
+	res.render('index', { settings:global.settings,
+		photos: global.fs.readdirSync(__dirname + "/../public/img"),
+		nav: '',
+		admin:(req.signedCookies.session == "nickhurst")});
 });
 
 router.get("/gallery", function(req, res) {

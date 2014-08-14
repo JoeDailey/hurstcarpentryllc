@@ -34,8 +34,7 @@
 		<div class="col-md-9 ">
 			<div class="card">
 				<h1>Hurst Carpentry LLC.</h1>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis arcu aliquam, luctus metus vel, vestibulum augue. Sed vitae fermentum nisi. Cras augue mauris, pretium vitae sapien id, ornare rutrum sem. Maecenas molestie massa lacus, at mollis sapien auctor sed. Donec a vehicula ligula, in tristique risus. Suspendisse pulvinar arcu id ligula sollicitudin rhoncus. Etiam ut mauris sed nisl laoreet semper eget ac lacus. Etiam at egestas nisi. Sed ornare sodales nulla et volutpat. Phasellus nec pellentesque lacus, a placerat dolor. Quisque porta, quam non cursus euismod, turpis libero rutrum orci, nec dictum ligula ligula sed ipsum. Curabitur congue faucibus.
-				</p>
+				<p><%= settings.main %></p>
 			</div>
 			<div class="card">
 				<h1>Free Estimate</h1>
@@ -62,8 +61,12 @@
 			</div>
 			<div class="card">
 				<h1>Contact</h1>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis arcu aliquam, luctus metus vel, vestibulum augue. Sed vitae fermentum nisi. Cras augue mauris, pretium vitae sapien id, ornare rutrum sem. Maecenas molestie massa lacus, at mollis sapien auctor sed. Donec a vehicula ligula, in tristique risus. Suspendisse pulvinar arcu id ligula sollicitudin rhoncus. Etiam ut mauris sed nisl laoreet semper eget ac lacus. Etiam at egestas nisi. Sed ornare sodales nulla et volutpat. Phasellus nec pellentesque lacus, a placerat dolor. Quisque porta, quam non cursus euismod, turpis libero rutrum orci, nec dictum ligula ligula sed ipsum. Curabitur congue faucibus.
-				</p>
+				<h2>Available by Phone at:</h2>
+				<h3><%= settings.contact.phone %></h3>
+				<p>Hours: 9-5 weekdays</p>
+				<h2>Available by Email at:</h2>
+				<h3><%= settings.contact.email %></h3>
+				<p>Please allow up to one business day for a response</p>
 			</div>
 		</div>
 	</div>
@@ -75,13 +78,7 @@
 				height: 528,
 				navigation:false
 			});
-			$("#textarea").bind("input propertychange", function(){
-				$("#shadow").val($(this).val());
-			});
 		});
 	</script>
-	<style type="text/css">
-	</style>
-
 
 <%= include part_foot %>

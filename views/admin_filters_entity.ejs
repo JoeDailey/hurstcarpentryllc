@@ -1,0 +1,35 @@
+<% include part_admin_head %>
+
+	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+			<h1>Update Filter</h1>
+			<form method="POST" action="/admin/set/update_filter/<%= filter.filter_id %>">
+				<div class="form-group">
+					<label for="filter-type">Title</label>
+					<input id="filter-type" class="form-control" type="text" name="type" value="<%= filter.type %>">
+				</div>
+				<div class="form-group">
+					<label for="filter-details">Details</label>
+					<textarea id="filter-details" class="form-control"><%= filter.details %></textarea>
+					<input type="text" style="display:none;" id="filter-detailsshadow" name="details" value="<%= filter.details %>">
+				</div>
+				<div class="form-inline form-group" >
+					<div class="form-group">
+						<label for="filter-price">Price</label>
+						<input id="filter-price" class="form-control" type="text" name="price" value="<%= filter.price %>">
+						<label for="filter-price_per">Per</label>
+						<input id="filter-price_per" class="form-control" type="text" name="price_per" value="<%= filter.price_per %>">
+					</div>
+				</div>
+				<div class="form-group">
+					<input class="form-control btn btn-default" type="submit" value="Update">
+				</div>
+			</form>
+			<form method="POST" action="/admin/set/delete_filter/<%= filter.filter_id %>">
+				<div class="form-group">
+					<input class="form-control btn btn-danger" type="submit" value="Delete">
+				</div>
+			</form>
+		</div>
+	</div>
+<% include part_foot %>
