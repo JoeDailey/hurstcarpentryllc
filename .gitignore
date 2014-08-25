@@ -26,8 +26,8 @@ node_modules
 
 .secret.json
 
-tmp
+tmp/*
 !tmp/.keep
 
-public/images
+public/images/*
 !public/images/.keep
