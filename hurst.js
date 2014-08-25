@@ -49,7 +49,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-// global.busboy = require('connect-busboy');
 
 var routes = require('./routes/index');
 var admin = require('./routes/admin');
@@ -63,8 +62,8 @@ hurst.set('view engine', 'ejs');
 
 hurst.use(favicon());
 hurst.use(logger('dev'));
-// hurst.use(bodyParser.json());
-// hurst.use(bodyParser.urlencoded({extended: true}));
+hurst.use(bodyParser.json());
+hurst.use(bodyParser.urlencoded({extended: true}));
 hurst.use(cookieParser(""+secret.session));
 hurst.use(session({
 	"secret":""+secret.session+secret.session,

@@ -71,7 +71,7 @@ router.post('/add_images/:showcase_id', function(req, res){
 		console.log(file);
 
 		file.image_id = global.s4()+global.s4();
-		file.endPath = "/img/"+file.image_id+"."+file.type.replace("image/","");
+		file.endPath = global.__project_dirname+"/public/images/"+file.image_id+"."+file.type.replace("image/","");
 		files.push({field:field, file:file});
 	});
 	form.on('end', function() {
@@ -85,16 +85,15 @@ router.post('/add_images/:showcase_id', function(req, res){
 			var db_index = 0;
 			if(image_number) db_index = image_number.image_order;
 			files.forEach(function(file, index){
-				console.log(file);
+				console.log(file.file.path, "-->", file.file.endPath);
 				try{
 					fs.renameSync(file.file.path, file.file.endPath);
 				}catch (e){
 					console.log(e);
-					for(;;);
 				}
 				db.run(	"INSERT INTO images ('image_id', 'image_url', 'image_order', 'showcase_id') "+
 						"VALUES ('"+file.file.image_id+"', '"+file.file.endPath+"', '"+( ++db_index )+"', '"+req.params.showcase_id+"')", function(err){
-							// if(index == files.length) res.redirect("/admin/gallery"+req.params.showcase_id);
+							if(index == files.length) res.redirect("/admin/gallery"+req.params.showcase_id);
 				});
 			});
 		});
