@@ -35,6 +35,7 @@ if (!exists) {
 										'"image_url" BLOB NOT NULL, '+
 										'"showcase_id" BLOB NOT NULL, '+
 										'"image_order" INTEGER NOT NULL, '+
+										'"image_text" BLOB, '+
 										'"created_at" TIMESTAMP DEFAULT (CURRENT_TIMESTAMP));');
 	});
  }
