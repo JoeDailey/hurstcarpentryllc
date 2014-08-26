@@ -4,7 +4,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function(req, res) {
-	db.all("SELECT  * FROM (  ( SELECT * FROM ( SELECT filter_id  FROM `filters` ) AS 'tFilters'  ) AS 'mFilters'  LEFT JOIN  ( SELECT * FROM ( SELECT showcase_id, filter_id, title  FROM `showcases`  GROUP BY filter_id ) AS 'tShowcases'  ) AS 'mShowcases' USING (`filter_id`)  INNER JOIN  ( SELECT * FROM ( SELECT *  FROM `images` ) AS 'tImages'  ) AS 'mImages' USING (`showcase_id`) );", function(err, imageList){
+	db.all("SELECT  * FROM (  ( SELECT * FROM ( SELECT filter_id  FROM `filters`  GROUP BY filter_id ) AS 'tFilters'  ) AS 'mFilters'  LEFT JOIN  ( SELECT * FROM ( SELECT showcase_id, filter_id, title  FROM `showcases` ) AS 'tShowcases'  ) AS 'mShowcases' USING (`filter_id`)  INNER JOIN  ( SELECT * FROM ( SELECT *  FROM `images` ) AS 'tImages'  ) AS 'mImages' USING (`showcase_id`) );", function(err, imageList){
 		res.render('index', { 
 			settings:global.settings,
 			photos: imageList,

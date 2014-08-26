@@ -4,10 +4,21 @@ var formidable = require('formidable');
 var fs = require('fs');
 
 
-/* GET users listing. */
+router.post('/main', function(req, res) {
+	if(!admin(req, res)) return;
+	global.settings.main = req.body.main;
+	fs.writeFile(global.__project_dirname+"/settings.json", JSON.stringify(global.settings, null, "\t"));
+	res.redirect("/admin");
+});
+router.post('/contact', function(req, res) {
+	if(!admin(req, res)) return;
+	global.settings.contact = req.body;
+	fs.writeFile(global.__project_dirname+"/settings.json", JSON.stringify(global.settings, null, "\t"));
+	res.redirect("/admin");
+});
+
 router.post('/new_filter', function(req, res) {
 	if(!admin(req, res)) return;
-	console.log(req.body);
 	db.run("INSERT INTO filters ('filter_id', 'type', 'details', 'price', 'price_per') "+
 			"VALUES ('"+global.s4()+"', '"+req.body.type+"', '"+req.body.details+"',"+
 			" '"+req.body.price+"', '"+req.body.price_per+"')", function(err){
@@ -17,7 +28,6 @@ router.post('/new_filter', function(req, res) {
 });
 router.post('/update_filter/:filter_id', function(req, res) {
 	if(!admin(req, res)) return;
-	console.log(req.body);
 	db.run("UPDATE filters SET type='"+req.body.type+"', details='"+req.body.details+"', "+
 				"price='"+req.body.price+"', price_per='"+req.body.price_per+"' WHERE filter_id='"+req.params.filter_id+"'",
 				function(err){
@@ -35,7 +45,6 @@ router.post('/delete_filter/:filter_id', function(req, res){
 //////Gallery
 router.post('/new_gallery', function(req, res) {
 	if(!admin(req, res)) return;
-	console.log(req.body);
 	db.run("INSERT INTO showcases ('showcase_id', 'title', 'about', 'location', 'price', 'filter_id') "+
 			"VALUES ('s_"+global.s4()+"', '"+req.body.title+"', '"+req.body.about+"',"+
 			" '"+req.body.location+"', '"+req.body.price+"', '"+req.body.filter_id+"')", function(err){
@@ -45,7 +54,6 @@ router.post('/new_gallery', function(req, res) {
 });
 router.post('/update_gallery/:showcase_id', function(req, res) {
 	if(!admin(req, res)) return;
-	console.log(req.body);
 	db.run("UPDATE showcases SET title='"+req.body.title+"', about='"+req.body.about+"', location='"+req.body.location+"', "+
 			" price='"+req.body.price+"', filter_id='"+req.body.filter_id+"' WHERE showcase_id='"+req.params.showcase_id+"'", function(err){
 				if(err) console.log(err);
