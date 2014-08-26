@@ -134,3 +134,7 @@ ul.slidesjs-pagination{
 .basic-grey button:hover {
     background: #CF7A7A
 }
+
+.card img{
+    width: 100%;
+}

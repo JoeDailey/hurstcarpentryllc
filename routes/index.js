@@ -4,11 +4,14 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function(req, res) {
-	console.log(global.fs.readdirSync(__dirname + "/../public/img"))
-	res.render('index', { settings:global.settings,
-		photos: global.fs.readdirSync(__dirname + "/../public/img"),
-		nav: '',
-		admin:(req.signedCookies.session == "nickhurst")});
+	db.all("SELECT  * FROM (  ( SELECT * FROM ( SELECT filter_id  FROM `filters` ) AS 'tFilters'  ) AS 'mFilters'  LEFT JOIN  ( SELECT * FROM ( SELECT showcase_id, filter_id, title  FROM `showcases`  GROUP BY filter_id ) AS 'tShowcases'  ) AS 'mShowcases' USING (`filter_id`)  INNER JOIN  ( SELECT * FROM ( SELECT *  FROM `images` ) AS 'tImages'  ) AS 'mImages' USING (`showcase_id`) );", function(err, imageList){
+		res.render('index', { 
+			settings:global.settings,
+			photos: imageList,
+			nav: '',
+			admin:(req.signedCookies.session == "nickhurst"),
+		});
+	});
 });
 
 router.get("/gallery", function(req, res) {
@@ -16,7 +19,6 @@ router.get("/gallery", function(req, res) {
 });
 
 router.post("/make_estimate", function(req, res) {
-	console.log(req.body)
 	// var transport = nm.createTransport();
 	var transport = nm.createTransport("direct", {debug: true});
 	console.log(global.secret, global.secret.from);

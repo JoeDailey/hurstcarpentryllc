@@ -67,16 +67,18 @@ router.post('/add_images/:showcase_id', function(req, res){
 
 
 	form.uploadDir = global.__project_dirname+"/tmp";
+	
 	form.on('file', function(field, file) {
 		console.log(file);
+		var ext = file.name.split(".");
+		ext = ext[ext.length-1];
 
 		file.image_id = global.s4()+global.s4();
-		file.endPath = global.__project_dirname+"/public/images/"+file.image_id+"."+file.type.replace("image/","");
+		file.endPath = "/images/"+file.image_id+"."+ext;
 		files.push({field:field, file:file});
 	});
+
 	form.on('end', function() {
-		console.log('done');
-		console.log(files);
 		db.get("SELECT image_order FROM images WHERE showcase_id='"+req.params.showcase_id+
 			"' ORDER BY image_order DESC LIMIT 1", function(err, image_number){
 			if(err){
@@ -85,20 +87,23 @@ router.post('/add_images/:showcase_id', function(req, res){
 			var db_index = 0;
 			if(image_number) db_index = image_number.image_order;
 			files.forEach(function(file, index){
-				console.log(file.file.path, "-->", file.file.endPath);
-				try{
-					fs.renameSync(file.file.path, file.file.endPath);
-				}catch (e){
-					console.log(e);
-				}
+				fs.renameSync(file.file.path, global.__project_dirname+"/public"+file.file.endPath);
 				db.run(	"INSERT INTO images ('image_id', 'image_url', 'image_order', 'showcase_id') "+
 						"VALUES ('"+file.file.image_id+"', '"+file.file.endPath+"', '"+( ++db_index )+"', '"+req.params.showcase_id+"')", function(err){
-							if(index == files.length) res.redirect("/admin/gallery"+req.params.showcase_id);
+							console.log(index, files.length);
+							if(index >= files.length-1)
+								res.redirect("/admin/gallery/"+req.params.showcase_id);
 				});
 			});
 		});
 	});
 	form.parse(req);
+});
+router.post('/delete_image/:image_id', function(req, res){
+	console.log(req.query)
+	if(!admin(req, res)) return;
+	db.run("DELETE FROM images WHERE image_id='"+req.params.image_id+"'");
+	res.redirect("/admin/gallery/"+req.query.si);
 });
 
 

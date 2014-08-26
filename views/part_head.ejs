@@ -37,6 +37,9 @@
 					<% if (nav == 'Error') { %>
 						<li class="active"><a href="#" ><%= errorNumber %></a></li>
 					<% } %>
+					<% if (locals.admin) { %>
+						<li><a href="/admin" >admin</a></li>
+					<% } %>
 				</ul>				
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->

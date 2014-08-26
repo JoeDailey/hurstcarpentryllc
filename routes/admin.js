@@ -46,13 +46,22 @@ router.get('/gallery', function(req, res){
 	});
 });
 router.get('/gallery/:showcases_id', function(req, res){
+	console.log(res);
 	if(!admin(req, res)) return;
 	db.all('SELECT * FROM filters', function(err, filtersList){
+		if(isErr(err, res)) return;
 		db.get('SELECT * FROM showcases WHERE showcase_id="'+req.params.showcases_id+'"', function(err, gallery){
-			if(err || !gallery)
+			if(isErr(err, res)) return;
+			if(!gallery){
 				res.redirect("/admin/gallery?e=Gallery does not exist.");
-			else
-				res.render("admin_gallery_entity", {filters:filtersList, gallery:gallery, nav:"gallery"});
+				return;
+			}else{
+				db.all('SELECT * FROM images WHERE showcase_id="'+req.params.showcases_id+'";', function(err, imageList){
+					if(isErr(err, res)) return;
+					if(!imageList) imageList = [];
+					res.render("admin_gallery_entity", {filters:filtersList, gallery:gallery, images:imageList, nav:"gallery"});
+				});
+			}
 		});
 	});
 });
@@ -63,5 +72,13 @@ global.admin = function(req, res){
 		return false;
 	}
 	return true;
+}
+global.isErr = function(err, res){
+	if(err){
+		console.log(err);
+		res.redirect("/admin?e=An error occurred!");
+		return true;
+	}
+	return false;
 }
 module.exports = router;

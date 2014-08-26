@@ -1,6 +1,9 @@
 <% include part_admin_head %>
-
-	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+	<% if(locals.images.length > 0){ %>
+		<div class="col-lg-6 col-lg-offset-2 col-sm-8 col-sm-1 col-xs-12">
+	<% }else{ %>
+		<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-1 col-xs-12">		
+	<% } %>
 		<div class="card">
 			<h1>Update gallery</h1>
 			<form method="POST" action="/admin/set/update_gallery/<%= gallery.showcase_id %>">
@@ -40,8 +43,6 @@
 				</div>
 			</form>
 		</div>
-	</div>
-	<div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
 		<div class="card">
 			<form method="POST" action="/admin/set/add_images/<%= gallery.showcase_id %>" accept-charset="UTF-8" enctype="multipart/form-data">
 				<div class="form-group">
@@ -53,4 +54,34 @@
 			</form>
 		</div>
 	</div>
+	<div class="col-sm-2 col-xs-2">
+		<% images.forEach(function(image){ %>
+			<div class="col-sm-6 col-xs-6">
+				<div class="card">
+					<form class="delete-image" action="/admin/set/delete_image/<%= image.image_id %>?si=<%= gallery.showcase_id %>" method="POST">
+						<button>X</button>
+					</form>
+					<img src="<%= image.image_url %>">
+				</div>
+			</div>
+		<% }); %>
+	</div>
+	<style type="text/css">
+		img{
+			width: 100%;	
+		}
+		.delete-image{
+			position: absolute;
+			right: 15px;
+			top: 10px;
+		}
+		.delete-image button{
+			background: transparent;
+			border:0px;
+			font-size: 2em;
+			color: white;
+			font-weight: bold;
+			text-shadow:black 0 0 5px;
+		}
+	</style>
 <% include part_foot %>
