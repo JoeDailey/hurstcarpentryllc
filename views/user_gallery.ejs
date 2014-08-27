@@ -1,0 +1,67 @@
+<%= include part_user_head %>
+	<div class="row col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1"  style="padding-left:10px; padding-right:10px;">
+		
+		<div class="col-sm-4 col-xm-12" style="box-sizing: border-box;">
+			<% galleries.forEach(function(gallery, index){ %>
+				<% if(index%3 == 0){ %>
+					<div class="card">
+						<a class="gal" href="/gallery/<%= gallery.showcase_id %>">
+							<img class="gal-img" src="<%= gallery.image_url %>">
+							<h1 class="gal-title"><%= gallery.title %></h1>
+						</a>
+					</div>
+				<% } %>
+			<% }) %>
+		</div>
+		<div class="col-sm-4 col-xm-12" style="box-sizing: border-box;">
+			<% galleries.forEach(function(gallery, index){ %>
+				<% if(index%3 == 1){ %>
+					<div class="card">
+						<a class="gal" href="/gallery/<%= gallery.showcase_id %>">
+							<img class="gal-img" src="<%= gallery.image_url %>">
+							<h1 class="gal-title"><%= gallery.title %></h1>
+						</a>
+					</div>
+				<% } %>
+			<% }) %>
+		</div>
+		<div class="col-sm-4 col-xm-12" style="box-sizing: border-box;">
+			<% galleries.forEach(function(gallery, index){ %>
+				<% if(index%3 == 2){ %>
+					<div class="card">
+						<a class="gal" href="/gallery/<%= gallery.showcase_id %>">
+							<img class="gal-img" src="<%= gallery.image_url %>">
+							<h1 class="gal-title"><%= gallery.title %></h1>
+						</a>
+					</div>
+				<% } %>
+			<% }) %>
+		</div>
+	</div>
+	<style type="text/css">
+		.gal:hover .gal-title{
+			opacity: 1.0;
+		}
+		.gal-title{
+			box-sizing: border-box;
+			background: rgba(0,0,0,0.6);
+			width: 100%;
+			margin:0;
+			font-size: 1.5em;
+			position: relative;
+			bottom: 0em;
+			float: left;
+			line-height: 1.2em;
+			color: white;
+			height: 1.2em;
+			bottom: 1.2em;
+			opacity: 0.0;
+			padding-left: 3px;
+			padding-right: 3px;
+			overflow: hidden;
+
+		    -webkit-transition: opacity 500ms; /* For Safari 3.1 to 6.0 */
+		    transition: opacity 500ms;
+		}
+	</style>
+<%= include part_foot %>

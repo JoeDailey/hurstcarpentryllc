@@ -96,7 +96,7 @@ hurst.use(function(req, res, next) {
 if (hurst.get('env') === 'development') {
 	hurst.use(function(err, req, res, next) {
 		res.status(err.status || 500);
-		res.render('error', {
+		res.render('user_error', {
 			message: err.message,
 			error: err
 		});
@@ -107,7 +107,7 @@ if (hurst.get('env') === 'development') {
 // no stacktraces leaked to user
 hurst.use(function(err, req, res, next) {
 	res.status(err.status || 500);
-	res.render('error', {
+	res.render('user_error', {
 		message: err.message,
 		error: {}
 	});

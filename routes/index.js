@@ -5,17 +5,13 @@ var router = express.Router();
 /* GET home page. */
 router.get("/", function(req, res) {
 	db.all("SELECT  * FROM (  ( SELECT * FROM ( SELECT filter_id  FROM `filters`  GROUP BY filter_id ) AS 'tFilters'  ) AS 'mFilters'  LEFT JOIN  ( SELECT * FROM ( SELECT showcase_id, filter_id, title  FROM `showcases` ) AS 'tShowcases'  ) AS 'mShowcases' USING (`filter_id`)  INNER JOIN  ( SELECT * FROM ( SELECT *  FROM `images` ) AS 'tImages'  ) AS 'mImages' USING (`showcase_id`) );", function(err, imageList){
-		res.render('index', { 
+		res.render('user_index', { 
 			settings:global.settings,
 			photos: imageList,
 			nav: '',
 			admin:(req.signedCookies.session == "nickhurst"),
 		});
 	});
-});
-
-router.get("/gallery", function(req, res) {
-  res.render('index', { nav: 'Gallery', admin:(req.signedCookies.session == "nickhurst")});
 });
 
 router.post("/make_estimate", function(req, res) {
@@ -111,7 +107,30 @@ router.post("/make_estimate", function(req, res) {
 });
 
 router.get("/estimate", function(req, res) {
-	res.render('success', { nav: 'Success' });
+	res.render('user_success', { nav: 'Success' });
+});
+
+router.get("/gallery", function(req, res){
+	db.all("SELECT * FROM (SELECT showcases.*, images.image_url, images.image_order FROM showcases LEFT JOIN images USING ('showcase_id') ORDER BY image_id ASC ) GROUP BY showcase_id", function(err, galleryList){
+		res.render("user_gallery", {
+			nav:"Gallery",
+			galleries:galleryList,
+			admin:(req.signedCookies.session == "nickhurst")
+		});
+	});
+});
+
+router.get("/gallery/:showcase_id", function(req, res){
+	db.get("SELECT * FROM showcases WHERE showcase_id='"+req.params.showcase_id+"';", function(err, gallery_entity){
+		db.all("SELECT * FROM images WHERE showcase_id='"+req.params.showcase_id+"';", function(err, imageList){
+			res.render("user_gallery_entity", {
+				nav:"Gallery",
+				gallery:gallery_entity,
+				images:imageList,
+				admin:(req.signedCookies.session == "nickhurst")
+			});
+		})
+	});
 });
 
 var monthlengths = [31,28,31,30,31,30,31,31,30,31,30,31];
