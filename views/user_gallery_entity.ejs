@@ -24,23 +24,95 @@
 	</div>
 	<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
 		<div class="card">
-			Content
+			
+			<span style="float:right;margin-right:10px;margin-top:0.5em;" class="gallery-location"><a href="#more-images">More Images</a></span>
+
+			<span class="gallery-title"><%= gallery.title %></span>
+			<span class="gallery-location hidden-xs"><%= gallery.location %></span>
+			<br class="visible-xs">
+			<span class="gallery-location visible-xs" style="margin-left:10px;"><%= gallery.location %></span>
+			<br>
+			<span class="gallery-price-label">Category:&nbsp;</span>
+			<span class="gallery-price"><%= gallery.type %></span>
+			<br>
+			<span class="gallery-price-label">Full Price:&nbsp;</span>
+			<span class="gallery-price">$<%= gallery.price %></span>
+			<br>
+			<p class="gallery-about"><%= gallery.about %></p>
+			
 		</div>
 	</div>
+	<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<%- comments %>		
+	</div>
+	<div id="more-images" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<% images.forEach(function(image){ %>		
+			<div class=" col-md-3 col-sm-4 col-xs-6">
+				<div class="card">
+					<img class="more-image" src="<%= image.image_url %>">
+				</div>
+			</div>
+		<% }); %>
+	</div>
+	<div id="full-screen" style="display:none;">
+		<div id="full-screen-img" class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12"></div>
+	</div>
+	<script>
+		$(document).ready(function(){
+			$(".more-image").on("click", function(){
+				$("#full-screen-img").css("background-image", "url("+$(this).attr("src")+")");
+				$("#full-screen").show(0);
+			});
+			$("#full-screen-img").on("click", function(e){
+				var $this = $(this),
+					image = new Image();
 
-	<style>
-		@import url("/stylesheets/reset.css") screen;
-		@import url("/stylesheets/animation.css") screen;
+				image.onload = function(){
+					var thisH = image.height / image.width * $this.height(); 
+					if(e.offsetY > thisH){
+						$("#full-screen").hide(0);
+					}
+				}
+				image.src = $this.css("background-image").replace("url(", "").replace(")", "");
 
-		/* Common */
-		html, body {
-			background:#eaeaea url(../img/bg.png) repeat;
-			font-size:12px;
-			font-family:"Open Sans", serif;
-			margin:0;
-			padding:0;
-			color:#aaa;
+				return false;
+			});
+			$("#full-screen").on("click", function(){
+				$("#full-screen").hide(0);
+			});
+			$(window).on("keyup", function(e){
+				if(e.keyCode == 27)
+					$("#full-screen").hide(0);
+			});
+			$(".comment-reply-button").on("click", replyClick);
+		})
+		var replyClick = function(){
+			parent = $($(this).parent());
+			parent_id = parent.attr("comment-id");
+			$(this).remove();
+			parent.append($(
+				"<form action='/admin/set/add_comment/"+parent_id+"?si=<%= gallery.showcase_id %>' method='POST'>"+
+					"<input type='text' placeholder='Display Name' name='name'>"+
+					"<input type='text' placeholder='Email (non-disclosed)' name='email'>"+
+					"<textarea id='comment-on-"+parent_id+"'></textarea>"+
+					"<input type='text' style='display:none;' id='comment-on-"+parent_id+"shadow' name='text'>"+
+					"<button type='submit'>Sumbit</button>"+
+					"<button type='button'>Cancel</button>"+
+				"</form>"	
+			));
+			$("textarea").on("input propertychange", function(){
+				$("#"+$(this).attr("id")+"shadow").val($(this).val());
+			});
+			$("button[type='button']").on("click", function(e){
+				e.preventDefault();
+				$($($(this).parent()).parent()).append($("<button class='comment-reply-button'>Reply</button>"));
+				$($(this).parent()).remove();
+				$(".comment-reply-button").on("click", replyClick);
+			});
 		}
+	</script>
+	<style>
+		@import url("/stylesheets/animation.css") screen;
 
 		.content h1 {
 			font-size:48px;
@@ -154,6 +226,38 @@
 			background:#000;
 			-moz-animation:fullexpand 25s ease-out infinite;
 			-webkit-animation:fullexpand 25s ease-out infinite;
+		}
+
+
+		.gallery-title{
+			font-size: 3em;
+			padding-left: 10px;
+		}
+		.gallery-location{
+			font-size: 2em;
+			color: #666;
+		}
+		.gallery-about{
+			font-size: 1em;
+			padding: 10px;
+			text-align:justify;
+		}
+		.gallery-price-label{
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		#full-screen{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			top: 0;left: 0;right: 0;bottom: 0;
+			background: rgba(0,0,0,0.5);
+			padding: 5%;
+		}
+		#full-screen-img{
+			height: 100%;
+			background-size: contain;
+			background-repeat: no-repeat;
 		}
 	</style>
 <%= include part_foot %>

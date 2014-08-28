@@ -138,3 +138,15 @@ ul.slidesjs-pagination{
 .card img{
     width: 100%;
 }
+
+textarea{
+    max-width: 100%;
+    min-width: 100%
+}
+
+.comment-container{
+    padding-left: 10px;
+    border-left: solid 3px #ddd;
+    border-bottom: solid 2px #ddd;
+    margin-bottom: 2px;
+}

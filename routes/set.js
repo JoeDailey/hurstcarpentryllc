@@ -108,10 +108,17 @@ router.post('/add_images/:showcase_id', function(req, res){
 	form.parse(req);
 });
 router.post('/delete_image/:image_id', function(req, res){
-	console.log(req.query)
 	if(!admin(req, res)) return;
 	db.run("DELETE FROM images WHERE image_id='"+req.params.image_id+"'");
 	res.redirect("/admin/gallery/"+req.query.si);
+});
+
+router.post('/add_comment/:parent_id', function(req, res){
+	console.log(req.params, req.query, req.body);
+	db.run("INSERT INTO comments ('comment_id', 'parent_id', 'showcase_id', 'name', 'email_address', 'text') "+
+				"VALUES ('c_"+global.s4()+"', '"+req.params.parent_id+"', '"+req.query.si+"', "+
+							"'"+req.body.name+"', '"+req.body.email+"', '"+req.body.text+"')");
+	res.redirect("/gallery/"+req.query.si+"#"+req.params.parent_id);
 });
 
 

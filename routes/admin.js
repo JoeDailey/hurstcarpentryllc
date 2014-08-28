@@ -1,5 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var isErr = function(err, res){
+	if(err){
+		console.log(err);
+		res.redirect("/admin?e=An error occurred!");
+		return true;
+	}
+	return false;
+}
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -73,12 +81,5 @@ global.admin = function(req, res){
 	}
 	return true;
 }
-global.isErr = function(err, res){
-	if(err){
-		console.log(err);
-		res.redirect("/admin?e=An error occurred!");
-		return true;
-	}
-	return false;
-}
+
 module.exports = router;

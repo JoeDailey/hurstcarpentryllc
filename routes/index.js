@@ -1,6 +1,13 @@
 var express = require('express');
 var router = express.Router();
-
+var isErr = function(err, res){
+	if(err){
+		console.log(err);
+		res.redirect("/?e=An Error Has Occurred");
+		return true;
+	}
+	return false;
+}
 
 /* GET home page. */
 router.get("/", function(req, res) {
@@ -121,17 +128,81 @@ router.get("/gallery", function(req, res){
 });
 
 router.get("/gallery/:showcase_id", function(req, res){
-	db.get("SELECT * FROM showcases WHERE showcase_id='"+req.params.showcase_id+"';", function(err, gallery_entity){
-		db.all("SELECT * FROM images WHERE showcase_id='"+req.params.showcase_id+"';", function(err, imageList){
+	var locks = 3, _gallery_entity, _imageList, _commentHTML;
+	var done = function(){
+		locks--;
+		if(locks<=0){
 			res.render("user_gallery_entity", {
 				nav:"Gallery",
-				gallery:gallery_entity,
-				images:imageList,
+				gallery:_gallery_entity,
+				images:_imageList,
+				comments:_commentHTML,
 				admin:(req.signedCookies.session == "nickhurst")
 			});
-		})
+		}
+	}
+	db.get("SELECT showcases.*, filters.type FROM showcases LEFT JOIN filters USING ('filter_id') WHERE showcase_id='"+req.params.showcase_id+"';", function(err, gallery_entity){
+		if(isErr(err, res)) return;
+		_gallery_entity = gallery_entity;
+		done();
+	});
+	db.all("SELECT * FROM images WHERE showcase_id='"+req.params.showcase_id+"';", function(err, imageList){
+		if(isErr(err, res)) return;
+		_imageList = imageList;
+		done();
+	});
+	db.all("SELECT * FROM comments WHERE showcase_id='"+req.params.showcase_id+"' ORDER BY created_at DESC;", function(err, commentList){
+		// if(isErr(err, res)) return;
+		var commentMap = {};
+		for(var commentIndex in commentList){
+			var comment = commentList[commentIndex];
+			comment.children = [];
+			commentMap[comment.comment_id] = comment;
+		}
+		console.log("mapped", commentMap);
+		for(var commentIndex in commentMap){
+			var comment = commentMap[commentIndex];
+			if(comment.parent_id){
+				commentMap[comment.parent_id].children.push(comment);
+			}
+		}
+		for(var commentIndex in commentMap){
+			if(commentMap[commentIndex].parent_id){
+				delete commentMap[commentIndex];
+			}
+		}
+		var HTML = "";
+		for(var commentIndex in commentMap){
+			HTML += generateCommentHTML(commentMap[commentIndex]);
+		}
+		console.log("done", JSON.stringify(commentMap), HTML);
+		_commentHTML = HTML;
+		done();
 	});
 });
+
+var generateCommentHTML = function(comment){
+	var html = "";
+	if(!comment.parent_id)
+		html += '<div class="card">';
+	{
+		
+		html += "<div class='comment-container' id='"+comment.comment_id+"' comment-id='"+comment.comment_id+"'>";
+		{
+			html += "<h3 class='comment-name'>" +comment.name + "</h3>";
+			html += "<p class='comment-text'>" +comment.text + "</p>";
+			html += "<button class='comment-reply-button'>Reply</button>"
+
+			for(var commentIndex in comment.children){
+				html += generateCommentHTML(comment.children[commentIndex]);
+			}
+		}
+		html += "</div>"
+	}
+	if(!comment.parent_id)
+		html += '</div>';
+	return html;
+}
 
 var monthlengths = [31,28,31,30,31,30,31,31,30,31,30,31];
 
