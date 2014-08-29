@@ -89,24 +89,25 @@
 		var replyClick = function(){
 			parent = $($(this).parent());
 			parent_id = parent.attr("comment-id");
-			$(this).remove();
-			parent.append($(
-				"<form action='/admin/set/add_comment/"+parent_id+"?si=<%= gallery.showcase_id %>' method='POST'>"+
+			$(this).replaceWith($(
+				"<form class='basic-grey col-xs-12 col-sm-8 col-md-6 col-lg-5' action='/admin/set/add_comment/"+parent_id+"?si=<%= gallery.showcase_id %>' method='POST'>"+
 					"<input type='text' placeholder='Display Name' name='name'>"+
 					"<input type='text' placeholder='Email (non-disclosed)' name='email'>"+
 					"<textarea id='comment-on-"+parent_id+"'></textarea>"+
 					"<input type='text' style='display:none;' id='comment-on-"+parent_id+"shadow' name='text'>"+
-					"<button type='submit'>Sumbit</button>"+
-					"<button type='button'>Cancel</button>"+
-				"</form>"	
+					"<div class='col-lg-6 col-md-6 col-sm-8 col-xs-12'>"+
+						"<button type='submit'>Sumbit</button>"+
+						"<button type='button'>Cancel</button>"+
+					"</div>"+
+				"</form>"+
+				"<div class='clearfix'></div>"
 			));
 			$("textarea").on("input propertychange", function(){
 				$("#"+$(this).attr("id")+"shadow").val($(this).val());
 			});
 			$("button[type='button']").on("click", function(e){
 				e.preventDefault();
-				$($($(this).parent()).parent()).append($("<button class='comment-reply-button'>Reply</button>"));
-				$($(this).parent()).remove();
+				$($(this).parent()).replaceWith($("<button class='comment-reply-button'>Reply</button>"));
 				$(".comment-reply-button").on("click", replyClick);
 			});
 		}

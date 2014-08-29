@@ -8,10 +8,10 @@ var isErr = function(err, res){
 	}
 	return false;
 }
-
+var filtersWithShowcasesWithImages_SQL = "SELECT  * FROM (  ( SELECT * FROM ( SELECT filter_id, type FROM `filters`  GROUP BY filter_id ) AS 'tFilters'  ) AS 'mFilters'  LEFT JOIN  ( SELECT * FROM ( SELECT showcase_id, filter_id, title  FROM `showcases`  GROUP BY filter_id) AS 'tShowcases'  ) AS 'mShowcases' USING (`filter_id`) INNER JOIN  ( SELECT * FROM ( SELECT *  FROM `images` ) AS 'tImages'  ) AS 'mImages' USING (`showcase_id`) );";
 /* GET home page. */
 router.get("/", function(req, res) {
-	db.all("SELECT  * FROM (  ( SELECT * FROM ( SELECT filter_id  FROM `filters`  GROUP BY filter_id ) AS 'tFilters'  ) AS 'mFilters'  LEFT JOIN  ( SELECT * FROM ( SELECT showcase_id, filter_id, title  FROM `showcases` ) AS 'tShowcases'  ) AS 'mShowcases' USING (`filter_id`)  INNER JOIN  ( SELECT * FROM ( SELECT *  FROM `images` ) AS 'tImages'  ) AS 'mImages' USING (`showcase_id`) );", function(err, imageList){
+	db.all(filtersWithShowcasesWithImages_SQL, function(err, imageList){
 		res.render('user_index', { 
 			settings:global.settings,
 			photos: imageList,
@@ -159,7 +159,6 @@ router.get("/gallery/:showcase_id", function(req, res){
 			comment.children = [];
 			commentMap[comment.comment_id] = comment;
 		}
-		console.log("mapped", commentMap);
 		for(var commentIndex in commentMap){
 			var comment = commentMap[commentIndex];
 			if(comment.parent_id){
@@ -175,7 +174,6 @@ router.get("/gallery/:showcase_id", function(req, res){
 		for(var commentIndex in commentMap){
 			HTML += generateCommentHTML(commentMap[commentIndex]);
 		}
-		console.log("done", JSON.stringify(commentMap), HTML);
 		_commentHTML = HTML;
 		done();
 	});
@@ -203,6 +201,45 @@ var generateCommentHTML = function(comment){
 		html += '</div>';
 	return html;
 }
+
+router.get('/categories', function(req, res){
+	db.all(filtersWithShowcasesWithImages_SQL, function(err, filterList){
+		if(isErr(err, res)) return;
+		res.render("user_filters", {
+				nav:"Category",
+				filters:filterList,
+				admin:(req.signedCookies.session == "nickhurst")
+			});
+	});
+});
+
+router.get('/categories/:filter_id', function(req, res){
+	var _galleryList, _filter_entity, locks = 2; 
+	var done = function(){
+		locks--;
+		if(locks<=0){
+			res.render("user_filter_entity", {
+				nav:"Category",
+				filter:_filter_entity,
+				galleries:_galleryList,
+				admin:(req.signedCookies.session == "nickhurst")
+			});
+		}
+	}
+	db.all("SELECT showcases.title, showcases.showcase_id, images.image_url FROM showcases "+
+				"LEFT JOIN images USING ('showcase_id') WHERE filter_id='"+req.params.filter_id+"';", function(err, galleryList){
+		if(isErr(err, res)) return;
+		_galleryList = galleryList;
+		done();
+	});
+	db.get("SELECT * FROM filters WHERE filter_id='"+req.params.filter_id+"';", function(err, filter_entity){
+		if(isErr(err, res)) return;
+		_filter_entity = filter_entity;
+		done();
+	});
+});
+
+
 
 var monthlengths = [31,28,31,30,31,30,31,31,30,31,30,31];
 

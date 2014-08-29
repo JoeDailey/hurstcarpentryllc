@@ -1,0 +1,26 @@
+<%= include part_user_head %>
+	<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<div class="card">
+
+			<span class="gallery-title"><%= filter.type %></span>
+			<br>
+			<span class="gallery-price-label">Estimated Pricing:&nbsp;</span>
+			<span class="gallery-price">$<%= filter.price %>/</span><span style="color:#666;font-size:0.9em;"><%= filter.price_per %></span>
+			<br>
+			<p class="gallery-about"><%= filter.details %></p>
+			
+		</div>
+	</div>
+	<div id="more-images" class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+		<% galleries.forEach(function(gallery){ %>		
+			<div class=" col-md-3 col-sm-4 col-xs-6">
+				<div class="card">
+					<a href="/gallery/<%= gallery.showcase_id %>"><img class="more-image" src="<%= gallery.image_url %>">
+				</div>
+			</div>
+		<% }); %>
+	</div>
+	<div id="full-screen" style="display:none;">
+		<div id="full-screen-img" class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1 col-xs-12"></div>
+	</div>
+<%= include part_foot %>
